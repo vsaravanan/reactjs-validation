@@ -1,22 +1,28 @@
-import React from 'react'
+import React from "react";
 
 export default class App extends React.Component {
+  constructor() {
+    super();
+    this.state = { a: "" };
+  }
+  update = () => {
+    this.setState({ a: this.a.value });
+    this.setState({ b: this.refs.b.value });
+  };
   render() {
-    return <Title text="12345678" />
+    return (
+      <div>
+        <input
+          ref={node => (this.a = node)}
+          type="text"
+          onChange={this.update}
+        />
+        {this.state.a}
+
+        <hr />
+        <input ref="b" type="text" onChange={this.update} />
+        {this.state.b}
+      </div>
+    );
   }
 }
-
-const Title = (props) => <h1>Title: {props.text}</h1>
-
-Title.propTypes = {
-  text(props, propName, Component) {
-    if (! (propName in props)) {
-      return new Error (`missing ${propName}`)
-    }
-    if (props[propName].length < 6) {
-      return new Error (`${propName} was too short` )
-    }
-  }
-}
-
-
