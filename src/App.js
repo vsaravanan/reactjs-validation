@@ -32,16 +32,19 @@ class Counter extends React.Component {
   }
   componentWillMount(){
     console.log('mounting')
+    this.setState({m : 2})
   }
   render(){
     console.log('rendering!')
-    return <button style={styles} onClick={this.update}>{this.state.val}</button>
+    return <button style={styles} onClick={this.update}>{this.state.val * this.state.m }</button>
   }
   componentDidMount(){
-    console.log('mounted')
+    console.log('mounted');
+    this.inc = setInterval(this.update, 500)
   }
   componentWillUnmount(){
-    console.log('bye!')
+    console.log('bye!');
+    clearInterval(this.inc)
   }
 }
 
