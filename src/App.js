@@ -1,74 +1,45 @@
-import React from "react";
-import ReactDOM from "react-dom";
+// Control React Component Updates When New Props Are Received
 
-var styles = {
-  width: '150px',
-  height: '50px',
-  margin: '10px',
-  border: 'solid 2px black',
-  fontFamily: 'Lato',
-  fontSize: '30px',
-  color: 'black',
-  backgroundColor: 'white'
-}
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
-var h1styles = {
-  margin: '10px',
-  fontFamily: 'Lato',
-  fontSize: '30px',
-  color: '#FF3333'
-}
-
-
-// Counter component
-class Counter extends React.Component {
-  constructor(){
+class App extends React.Component {
+  constructor() {
     super();
-    this.state = { val: 0 };
-    this.update = this.update.bind(this);
+    this.state = { increasing: false };
   }
-  update(){
-    this.setState({val: this.state.val + 1 })
+  update() {
+    ReactDOM.render(
+      <App val={this.props.val + 1} />,
+      document.getElementById('root'));
   }
-  componentWillMount(){
-    console.log('mounting')
-    this.setState({m : 2})
+  componentWillReceiveProps(nextProps) {
+    this.setState({ increasing: nextProps.val > this.props.val });
   }
-  render(){
-    console.log('rendering!')
-    return <button style={styles} onClick={this.update}>{this.state.val * this.state.m }</button>
-  }
-  componentDidMount(){
-    console.log('mounted');
-    this.inc = setInterval(this.update, 500)
-  }
-  componentWillUnmount(){
-    console.log('bye!');
-    clearInterval(this.inc)
-  }
-}
 
-// Wrapper component
-export default class Wrapper extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.val % 5 === 0;
+  }
 
-  mount(){
-    ReactDOM.render(<Counter />, document.getElementById('a'))
+  componentDidUpdate(prevProps, prevState) {
+    console.log(`prevProps: ${prevProps.val}`);
   }
-  unmount(){
-    ReactDOM.unmountComponentAtNode(document.getElementById('a'))
-  }
-  render(){
+
+  render() {
+    console.log(this.state.increasing);
     return (
-        <div>
-          <h1 style={h1styles}>How to Mount/Unmount a Component in React.js</h1>
-          <hr />
-          <button style={styles} onClick={this.mount.bind(this)}>Mount</button>
-          <button style={styles} onClick={this.unmount.bind(this)}>Unmount</button>
-          <div id="a"></div>
-        </div>
-    )
+      <button onClick={this.update.bind(this)}>
+        {this.props.val}
+      </button>
+    );
   }
 }
 
-// Render Wrapper
-ReactDOM.render(<Wrapper />, document.getElementById('root'))
+App.propTypes = {
+  val: PropTypes.PropTypes.number,
+};
+
+App.defaultProps = { val: 0 };
+
+export default App;
