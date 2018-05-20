@@ -7,7 +7,7 @@ export default class App extends React.Component {
     this.state = { a: "" };
   }
   update = () => {
-    this.setState({ a: ReactDOM.findDOMNode(this.a).value });
+    this.setState({ a: this.a.refs.input.value });
     this.setState({ b: this.refs.b.value });
   };
   render() {
@@ -26,6 +26,10 @@ export default class App extends React.Component {
 
 class Input extends React.Component {
   render() {
-    return <input type="text" onChange={this.props.update} />;
+    return (
+      <div>
+        <input ref="input" type="text" onChange={this.props.update} />{" "}
+      </div>
+    );
   }
 }
