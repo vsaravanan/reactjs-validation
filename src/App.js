@@ -1,35 +1,71 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default class App extends React.Component {
-  constructor() {
+var styles = {
+  width: '150px',
+  height: '50px',
+  margin: '10px',
+  border: 'solid 2px black',
+  fontFamily: 'Lato',
+  fontSize: '30px',
+  color: 'black',
+  backgroundColor: 'white'
+}
+
+var h1styles = {
+  margin: '10px',
+  fontFamily: 'Lato',
+  fontSize: '30px',
+  color: '#FF3333'
+}
+
+
+// Counter component
+class Counter extends React.Component {
+  constructor(){
     super();
-    this.state = { a: "" };
+    this.state = { val: 0 };
+    this.update = this.update.bind(this);
   }
-  update = () => {
-    this.setState({ a: this.a.refs.input.value });
-    this.setState({ b: this.refs.b.value });
-  };
-  render() {
-    return (
-      <div>
-        <Input ref={node => (this.a = node)} update={this.update} />
-        {this.state.a}
+  update(){
+    this.setState({val: this.state.val + 1 })
+  }
+  componentWillMount(){
+    console.log('mounting')
+  }
+  render(){
+    console.log('rendering!')
+    return <button style={styles} onClick={this.update}>{this.state.val}</button>
+  }
+  componentDidMount(){
+    console.log('mounted')
+  }
+  componentWillUnmount(){
+    console.log('bye!')
+  }
+}
 
-        <hr />
-        <input ref="b" type="text" onChange={this.update} />
-        {this.state.b}
-      </div>
-    );
+// Wrapper component
+export default class Wrapper extends React.Component {
+
+  mount(){
+    ReactDOM.render(<Counter />, document.getElementById('a'))
+  }
+  unmount(){
+    ReactDOM.unmountComponentAtNode(document.getElementById('a'))
+  }
+  render(){
+    return (
+        <div>
+          <h1 style={h1styles}>How to Mount/Unmount a Component in React.js</h1>
+          <hr />
+          <button style={styles} onClick={this.mount.bind(this)}>Mount</button>
+          <button style={styles} onClick={this.unmount.bind(this)}>Unmount</button>
+          <div id="a"></div>
+        </div>
+    )
   }
 }
 
-class Input extends React.Component {
-  render() {
-    return (
-      <div>
-        <input ref="input" type="text" onChange={this.props.update} />{" "}
-      </div>
-    );
-  }
-}
+// Render Wrapper
+ReactDOM.render(<Wrapper />, document.getElementById('root'))
