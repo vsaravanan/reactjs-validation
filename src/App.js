@@ -1,43 +1,47 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {items: []}
-  }
-
-  componentWillMount = () => {
-    fetch('https://swapi.co/api/people/?format=json')
-    .then ( res => res.json())
-    .then (({results: items})  => this.setState({items}))
-  }
-  
-  filter = (e) => {
-    this.setState({filter : e.target.value});
-  }
-  
-  render() {
-    let items = this.state.items;
-    if (this.state.filter) {
-      items = items.filter (
-        item => item.name.toLowerCase()
-        .includes(this.state.filter.toLowerCase())
-      )
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: '/* add your jsx here */',
+      output: '',
+      err: ''
     }
-    return (
-      <div>
-        <input type="text" onChange={this.filter} />
-        {items.map(item => 
-        <Person  key={item.name} person={item} />
-        )}
+  }
 
+  update(e) {
+    let code = e.target.value;
+    try {
+      this.setState({ output: window.Babel
+        .transform(code, {presets: ['es2015', 'react']})
+        .code,
+        err: '' })
+    } 
+    catch(err) {
+      this.setState({ err: err.message })
+    }
+  }
+
+  render() {
+    return(
+      <div>
+        <header>{this.state.err}</header>
+        <div className="container">
+          <textarea
+          onChange={this.update.bind(this)}
+          defaultValue={this.state.input}
+          />
+          <pre>
+            {this.state.output}
+          </pre>
+        </div>
       </div>
-    )
+    );
   }
 }
 
-const Person = (props) => <h4>{ props.person.name}</h4>
+
 export default App;

@@ -19,14 +19,47 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
 
+
+    <title>React App</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js"></script>
 <style>
 html {
   background-color: #333333;
   color: white;
 }
 
+body {
+      margin: 0;
+      padding: 0;
+      font-family: monospace;
+    }
+    header {
+      display: block;
+      height: 5vh;
+      overflow: auto;
+      background-color: pink;
+      color: red;
+      font-size: 28px;
+    }
+    .container {
+      height: 95vh;
+      display: flex;
+    }
+    pre {
+      background-color: #f8f8f8;
+    }
+    pre, textarea {
+      width: 50%;
+      font-family: monospace;
+      font-size: 28px;
+      margin: 0;
+      padding: 10px;
+      color: #222;
+    }
+    textarea:focus {
+      outline: 0;
+    }
 
 </style>
 
